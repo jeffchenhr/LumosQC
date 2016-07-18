@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include <string> 
 
 namespace CppWinForm1 {
 
@@ -10,6 +11,7 @@ namespace CppWinForm1 {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::IO::Ports;
+	using namespace System::IO;
 
 
 
@@ -23,10 +25,24 @@ namespace CppWinForm1 {
 		{
 			InitializeComponent();
 			findPorts();
-			TestResult = gcnew array<int>(6);
+			TestResult = gcnew array<int>(9);
 			serialBuffer = gcnew array<String^>{"", "", "","",""};
 			ResetTestResult();
 			UpdateTestResult();
+
+			//initialized Streamwriter
+			DateTime^ dateTime = DateTime::Now;
+			String^ NewString = dateTime->ToString();
+			NewString = NewString->Replace("/","");
+			NewString = NewString->Replace(" ", "");
+			NewString = NewString->Replace(":", "");
+			String^ fileName = "E:\\ProductionLog\\eventlog.txt";
+			String^ fileNameProduct = "E:\\ProductionLog\\productlog.txt";
+			
+			eventLog = gcnew StreamWriter(fileName,true);
+			productLog = gcnew StreamWriter(fileNameProduct,true);
+			
+
 
 #if 0
 			this->backgroundWorker1->ProgressChanged += gcnew ProgressChangedEventHandler(this, &MyForm::backgroundWorker1_ProgressChanged);
@@ -115,6 +131,11 @@ namespace CppWinForm1 {
 	public: array<String^>^ serialBuffer;
 	public:		long buffnum = 0;
 	public:		long readnum = 0;
+	public: StreamWriter^ eventLog;
+	public: StreamWriter^ productLog;
+public: StreamWriter^ labelLog;
+	public:	array<int>^ TestResult;
+	public: String^ FirmwareVersion = "2.0";
 
 	private: System::Windows::Forms::Label^  label19;
 	private: System::Windows::Forms::Label^  label20;
@@ -138,9 +159,26 @@ private: System::Windows::Forms::Label^  label26;
 private: System::Windows::Forms::Label^  label27;
 private: System::Windows::Forms::Label^  label28;
 private: System::Windows::Forms::Label^  label29;
+private: System::Windows::Forms::Label^  label30;
+private: System::Windows::Forms::ComboBox^  comboBox3;
+private: System::Windows::Forms::Label^  label31;
+private: System::Windows::Forms::Label^  label32;
+private: System::Windows::Forms::TextBox^  textBox1;
+
+private: System::Windows::Forms::Label^  label33;
+private: System::Windows::Forms::Label^  label35;
+private: System::Windows::Forms::Label^  label36;
+private: System::Windows::Forms::Label^  label37;
+private: System::Windows::Forms::Label^  label38;
+private: System::Windows::Forms::Label^  label39;
+private: System::Windows::Forms::Label^  label40;
+private: System::Windows::Forms::Label^  label41;
+private: System::Windows::Forms::Label^  label42;
+private: System::Windows::Forms::Label^  label34;
 
 
-	public:	array<int>^ TestResult;
+
+	
 
 
 
@@ -203,6 +241,21 @@ private: System::Windows::Forms::Label^  label29;
 			this->label27 = (gcnew System::Windows::Forms::Label());
 			this->label28 = (gcnew System::Windows::Forms::Label());
 			this->label29 = (gcnew System::Windows::Forms::Label());
+			this->label30 = (gcnew System::Windows::Forms::Label());
+			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
+			this->label31 = (gcnew System::Windows::Forms::Label());
+			this->label32 = (gcnew System::Windows::Forms::Label());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->label33 = (gcnew System::Windows::Forms::Label());
+			this->label34 = (gcnew System::Windows::Forms::Label());
+			this->label35 = (gcnew System::Windows::Forms::Label());
+			this->label36 = (gcnew System::Windows::Forms::Label());
+			this->label37 = (gcnew System::Windows::Forms::Label());
+			this->label38 = (gcnew System::Windows::Forms::Label());
+			this->label39 = (gcnew System::Windows::Forms::Label());
+			this->label40 = (gcnew System::Windows::Forms::Label());
+			this->label41 = (gcnew System::Windows::Forms::Label());
+			this->label42 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->groupBox1->SuspendLayout();
 			this->groupBox3->SuspendLayout();
@@ -319,12 +372,13 @@ private: System::Windows::Forms::Label^  label29;
 			this->label4->AutoSize = true;
 			this->label4->Font = (gcnew System::Drawing::Font(L"SimSun", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(134)));
-			this->label4->Location = System::Drawing::Point(200, 53);
+			this->label4->Location = System::Drawing::Point(199, 53);
 			this->label4->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(319, 20);
+			this->label4->Size = System::Drawing::Size(269, 20);
 			this->label4->TabIndex = 14;
-			this->label4->Text = L"Final Product Test Program V0.1";
+			this->label4->Text = L"Final Product Test Program";
+			this->label4->Click += gcnew System::EventHandler(this, &MyForm::label4_Click);
 			// 
 			// richTextBox1
 			// 
@@ -390,7 +444,7 @@ private: System::Windows::Forms::Label^  label29;
 			this->groupBox3->Controls->Add(this->label19);
 			this->groupBox3->Controls->Add(this->label15);
 			this->groupBox3->Controls->Add(this->label7);
-			this->groupBox3->Location = System::Drawing::Point(498, 261);
+			this->groupBox3->Location = System::Drawing::Point(511, 280);
 			this->groupBox3->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox3->Name = L"groupBox3";
 			this->groupBox3->Padding = System::Windows::Forms::Padding(2);
@@ -443,7 +497,7 @@ private: System::Windows::Forms::Label^  label29;
 			this->groupBox4->Controls->Add(this->label20);
 			this->groupBox4->Controls->Add(this->label16);
 			this->groupBox4->Controls->Add(this->label8);
-			this->groupBox4->Location = System::Drawing::Point(837, 261);
+			this->groupBox4->Location = System::Drawing::Point(850, 280);
 			this->groupBox4->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox4->Name = L"groupBox4";
 			this->groupBox4->Padding = System::Windows::Forms::Padding(2);
@@ -494,7 +548,7 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			// button5
 			// 
-			this->button5->Location = System::Drawing::Point(684, 434);
+			this->button5->Location = System::Drawing::Point(697, 453);
 			this->button5->Margin = System::Windows::Forms::Padding(2);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(159, 67);
@@ -505,7 +559,7 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(512, 434);
+			this->button4->Location = System::Drawing::Point(525, 453);
 			this->button4->Margin = System::Windows::Forms::Padding(2);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(159, 67);
@@ -516,7 +570,7 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			// button6
 			// 
-			this->button6->Location = System::Drawing::Point(1059, 434);
+			this->button6->Location = System::Drawing::Point(1072, 453);
 			this->button6->Margin = System::Windows::Forms::Padding(2);
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(159, 67);
@@ -528,7 +582,7 @@ private: System::Windows::Forms::Label^  label29;
 			// label9
 			// 
 			this->label9->AutoSize = true;
-			this->label9->Location = System::Drawing::Point(568, 73);
+			this->label9->Location = System::Drawing::Point(557, 74);
 			this->label9->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(29, 12);
@@ -539,7 +593,7 @@ private: System::Windows::Forms::Label^  label29;
 			// label10
 			// 
 			this->label10->AutoSize = true;
-			this->label10->Location = System::Drawing::Point(674, 73);
+			this->label10->Location = System::Drawing::Point(663, 74);
 			this->label10->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label10->Name = L"label10";
 			this->label10->Size = System::Drawing::Size(17, 12);
@@ -550,7 +604,7 @@ private: System::Windows::Forms::Label^  label29;
 			// label11
 			// 
 			this->label11->AutoSize = true;
-			this->label11->Location = System::Drawing::Point(736, 73);
+			this->label11->Location = System::Drawing::Point(725, 74);
 			this->label11->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label11->Name = L"label11";
 			this->label11->Size = System::Drawing::Size(23, 12);
@@ -560,7 +614,7 @@ private: System::Windows::Forms::Label^  label29;
 			// label12
 			// 
 			this->label12->AutoSize = true;
-			this->label12->Location = System::Drawing::Point(1088, 73);
+			this->label12->Location = System::Drawing::Point(1077, 74);
 			this->label12->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label12->Name = L"label12";
 			this->label12->Size = System::Drawing::Size(83, 12);
@@ -569,7 +623,7 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			// button8
 			// 
-			this->button8->Location = System::Drawing::Point(958, 450);
+			this->button8->Location = System::Drawing::Point(971, 469);
 			this->button8->Margin = System::Windows::Forms::Padding(2);
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(70, 34);
@@ -580,7 +634,7 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			// button11
 			// 
-			this->button11->Location = System::Drawing::Point(881, 450);
+			this->button11->Location = System::Drawing::Point(894, 469);
 			this->button11->Margin = System::Windows::Forms::Padding(2);
 			this->button11->Name = L"button11";
 			this->button11->Size = System::Drawing::Size(70, 34);
@@ -651,7 +705,7 @@ private: System::Windows::Forms::Label^  label29;
 			this->groupBox2->Controls->Add(this->label5);
 			this->groupBox2->Controls->Add(this->label14);
 			this->groupBox2->Controls->Add(this->label13);
-			this->groupBox2->Location = System::Drawing::Point(498, 117);
+			this->groupBox2->Location = System::Drawing::Point(511, 136);
 			this->groupBox2->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox2->Name = L"groupBox2";
 			this->groupBox2->Padding = System::Windows::Forms::Padding(2);
@@ -690,49 +744,49 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			this->label21->AutoSize = true;
 			this->label21->ForeColor = System::Drawing::Color::Red;
-			this->label21->Location = System::Drawing::Point(624, 73);
+			this->label21->Location = System::Drawing::Point(613, 74);
 			this->label21->Name = L"label21";
-			this->label21->Size = System::Drawing::Size(47, 12);
+			this->label21->Size = System::Drawing::Size(17, 12);
 			this->label21->TabIndex = 30;
-			this->label21->Text = L"label21";
+			this->label21->Text = L"**";
 			this->label21->Click += gcnew System::EventHandler(this, &MyForm::label21_Click);
 			// 
 			// label22
 			// 
 			this->label22->AutoSize = true;
 			this->label22->ForeColor = System::Drawing::Color::Red;
-			this->label22->Location = System::Drawing::Point(1176, 73);
+			this->label22->Location = System::Drawing::Point(1165, 74);
 			this->label22->Name = L"label22";
-			this->label22->Size = System::Drawing::Size(47, 12);
+			this->label22->Size = System::Drawing::Size(17, 12);
 			this->label22->TabIndex = 31;
-			this->label22->Text = L"label22";
+			this->label22->Text = L"**";
 			this->label22->Click += gcnew System::EventHandler(this, &MyForm::label22_Click);
 			// 
 			// label23
 			// 
 			this->label23->AutoSize = true;
 			this->label23->ForeColor = System::Drawing::Color::Red;
-			this->label23->Location = System::Drawing::Point(764, 73);
+			this->label23->Location = System::Drawing::Point(753, 74);
 			this->label23->Name = L"label23";
-			this->label23->Size = System::Drawing::Size(47, 12);
+			this->label23->Size = System::Drawing::Size(17, 12);
 			this->label23->TabIndex = 32;
-			this->label23->Text = L"label23";
+			this->label23->Text = L"**";
 			// 
 			// label24
 			// 
 			this->label24->AutoSize = true;
 			this->label24->ForeColor = System::Drawing::Color::Red;
-			this->label24->Location = System::Drawing::Point(1007, 73);
+			this->label24->Location = System::Drawing::Point(996, 74);
 			this->label24->Name = L"label24";
-			this->label24->Size = System::Drawing::Size(47, 12);
+			this->label24->Size = System::Drawing::Size(17, 12);
 			this->label24->TabIndex = 34;
-			this->label24->Text = L"label24";
+			this->label24->Text = L"**";
 			this->label24->Click += gcnew System::EventHandler(this, &MyForm::label24_Click);
 			// 
 			// label25
 			// 
 			this->label25->AutoSize = true;
-			this->label25->Location = System::Drawing::Point(877, 73);
+			this->label25->Location = System::Drawing::Point(866, 74);
 			this->label25->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label25->Name = L"label25";
 			this->label25->Size = System::Drawing::Size(125, 12);
@@ -743,7 +797,7 @@ private: System::Windows::Forms::Label^  label29;
 			// label26
 			// 
 			this->label26->AutoSize = true;
-			this->label26->Location = System::Drawing::Point(877, 103);
+			this->label26->Location = System::Drawing::Point(866, 104);
 			this->label26->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label26->Name = L"label26";
 			this->label26->Size = System::Drawing::Size(125, 12);
@@ -754,16 +808,16 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			this->label27->AutoSize = true;
 			this->label27->ForeColor = System::Drawing::Color::Red;
-			this->label27->Location = System::Drawing::Point(1007, 103);
+			this->label27->Location = System::Drawing::Point(996, 104);
 			this->label27->Name = L"label27";
-			this->label27->Size = System::Drawing::Size(47, 12);
+			this->label27->Size = System::Drawing::Size(17, 12);
 			this->label27->TabIndex = 36;
-			this->label27->Text = L"label27";
+			this->label27->Text = L"**";
 			// 
 			// label28
 			// 
 			this->label28->AutoSize = true;
-			this->label28->Location = System::Drawing::Point(736, 103);
+			this->label28->Location = System::Drawing::Point(725, 104);
 			this->label28->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label28->Name = L"label28";
 			this->label28->Size = System::Drawing::Size(23, 12);
@@ -774,17 +828,184 @@ private: System::Windows::Forms::Label^  label29;
 			// 
 			this->label29->AutoSize = true;
 			this->label29->ForeColor = System::Drawing::Color::Red;
-			this->label29->Location = System::Drawing::Point(765, 103);
+			this->label29->Location = System::Drawing::Point(754, 104);
 			this->label29->Name = L"label29";
-			this->label29->Size = System::Drawing::Size(47, 12);
+			this->label29->Size = System::Drawing::Size(17, 12);
 			this->label29->TabIndex = 38;
-			this->label29->Text = L"label29";
+			this->label29->Text = L"**";
+			// 
+			// label30
+			// 
+			this->label30->AutoSize = true;
+			this->label30->Location = System::Drawing::Point(1128, 572);
+			this->label30->Name = L"label30";
+			this->label30->Size = System::Drawing::Size(125, 12);
+			this->label30->TabIndex = 39;
+			this->label30->Text = L"Software Version 0.1";
+			// 
+			// comboBox3
+			// 
+			this->comboBox3->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->comboBox3->FormattingEnabled = true;
+			this->comboBox3->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"BK", L"WH", L"BL" });
+			this->comboBox3->Location = System::Drawing::Point(126, 564);
+			this->comboBox3->Margin = System::Windows::Forms::Padding(2);
+			this->comboBox3->Name = L"comboBox3";
+			this->comboBox3->Size = System::Drawing::Size(100, 20);
+			this->comboBox3->TabIndex = 16;
+			// 
+			// label31
+			// 
+			this->label31->AutoSize = true;
+			this->label31->Location = System::Drawing::Point(87, 569);
+			this->label31->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->label31->Name = L"label31";
+			this->label31->Size = System::Drawing::Size(29, 12);
+			this->label31->TabIndex = 16;
+			this->label31->Text = L"颜色";
+			this->label31->Click += gcnew System::EventHandler(this, &MyForm::label31_Click);
+			// 
+			// label32
+			// 
+			this->label32->AutoSize = true;
+			this->label32->Location = System::Drawing::Point(257, 566);
+			this->label32->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->label32->Name = L"label32";
+			this->label32->Size = System::Drawing::Size(41, 12);
+			this->label32->TabIndex = 40;
+			this->label32->Text = L"QC人员";
+			this->label32->Click += gcnew System::EventHandler(this, &MyForm::label32_Click);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(300, 563);
+			this->textBox1->Margin = System::Windows::Forms::Padding(2);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(110, 21);
+			this->textBox1->TabIndex = 16;
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox1_TextChanged_1);
+			// 
+			// label33
+			// 
+			this->label33->AutoSize = true;
+			this->label33->Location = System::Drawing::Point(1057, 104);
+			this->label33->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->label33->Name = L"label33";
+			this->label33->Size = System::Drawing::Size(101, 12);
+			this->label33->TabIndex = 41;
+			this->label33->Text = L"Firmware Version";
+			this->label33->Click += gcnew System::EventHandler(this, &MyForm::label33_Click);
+			// 
+			// label34
+			// 
+			this->label34->AutoSize = true;
+			this->label34->ForeColor = System::Drawing::Color::Red;
+			this->label34->Location = System::Drawing::Point(1165, 104);
+			this->label34->Name = L"label34";
+			this->label34->Size = System::Drawing::Size(17, 12);
+			this->label34->TabIndex = 42;
+			this->label34->Text = L"**";
+			// 
+			// label35
+			// 
+			this->label35->AutoSize = true;
+			this->label35->BackColor = System::Drawing::Color::Yellow;
+			this->label35->Location = System::Drawing::Point(687, 421);
+			this->label35->Name = L"label35";
+			this->label35->Size = System::Drawing::Size(29, 12);
+			this->label35->TabIndex = 43;
+			this->label35->Text = L"LED1";
+			// 
+			// label36
+			// 
+			this->label36->AutoSize = true;
+			this->label36->BackColor = System::Drawing::Color::Yellow;
+			this->label36->Location = System::Drawing::Point(735, 421);
+			this->label36->Name = L"label36";
+			this->label36->Size = System::Drawing::Size(29, 12);
+			this->label36->TabIndex = 44;
+			this->label36->Text = L"LED2";
+			// 
+			// label37
+			// 
+			this->label37->AutoSize = true;
+			this->label37->BackColor = System::Drawing::Color::Yellow;
+			this->label37->Location = System::Drawing::Point(787, 421);
+			this->label37->Name = L"label37";
+			this->label37->Size = System::Drawing::Size(41, 12);
+			this->label37->TabIndex = 45;
+			this->label37->Text = L"Buzzer";
+			// 
+			// label38
+			// 
+			this->label38->AutoSize = true;
+			this->label38->BackColor = System::Drawing::Color::Yellow;
+			this->label38->Location = System::Drawing::Point(848, 421);
+			this->label38->Name = L"label38";
+			this->label38->Size = System::Drawing::Size(41, 12);
+			this->label38->TabIndex = 46;
+			this->label38->Text = L"Remote";
+			// 
+			// label39
+			// 
+			this->label39->AutoSize = true;
+			this->label39->BackColor = System::Drawing::Color::Yellow;
+			this->label39->Location = System::Drawing::Point(906, 421);
+			this->label39->Name = L"label39";
+			this->label39->Size = System::Drawing::Size(29, 12);
+			this->label39->TabIndex = 47;
+			this->label39->Text = L"RSSI";
+			// 
+			// label40
+			// 
+			this->label40->AutoSize = true;
+			this->label40->BackColor = System::Drawing::Color::Yellow;
+			this->label40->Location = System::Drawing::Point(955, 421);
+			this->label40->Name = L"label40";
+			this->label40->Size = System::Drawing::Size(23, 12);
+			this->label40->TabIndex = 48;
+			this->label40->Text = L"HRL";
+			// 
+			// label41
+			// 
+			this->label41->AutoSize = true;
+			this->label41->BackColor = System::Drawing::Color::Yellow;
+			this->label41->Location = System::Drawing::Point(1001, 421);
+			this->label41->Name = L"label41";
+			this->label41->Size = System::Drawing::Size(23, 12);
+			this->label41->TabIndex = 49;
+			this->label41->Text = L"RBL";
+			// 
+			// label42
+			// 
+			this->label42->AutoSize = true;
+			this->label42->BackColor = System::Drawing::Color::Yellow;
+			this->label42->Location = System::Drawing::Point(1045, 421);
+			this->label42->Name = L"label42";
+			this->label42->Size = System::Drawing::Size(23, 12);
+			this->label42->TabIndex = 50;
+			this->label42->Text = L"FWV";
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1298, 570);
+			this->ClientSize = System::Drawing::Size(1266, 601);
+			this->Controls->Add(this->label42);
+			this->Controls->Add(this->label41);
+			this->Controls->Add(this->label40);
+			this->Controls->Add(this->label39);
+			this->Controls->Add(this->label38);
+			this->Controls->Add(this->label37);
+			this->Controls->Add(this->label36);
+			this->Controls->Add(this->label35);
+			this->Controls->Add(this->label34);
+			this->Controls->Add(this->label33);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->label32);
+			this->Controls->Add(this->label31);
+			this->Controls->Add(this->comboBox3);
+			this->Controls->Add(this->label30);
 			this->Controls->Add(this->label29);
 			this->Controls->Add(this->label28);
 			this->Controls->Add(this->label27);
@@ -812,6 +1033,7 @@ private: System::Windows::Forms::Label^  label29;
 			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MyForm::MyForm_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MyForm::Form1_KeyPress);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
@@ -982,6 +1204,66 @@ private:
 				break;
 			}
 
+			switch (TestResult[5])
+			{
+			case 0:
+				this->label39->BackColor = System::Drawing::Color::Yellow;
+				break;
+			case 1:
+				this->label39->BackColor = System::Drawing::Color::Red;
+				break;
+			case 2:
+				this->label39->BackColor = System::Drawing::Color::Green;
+				break;
+			default:
+				break;
+			}
+
+			switch (TestResult[6])
+			{
+			case 0:
+				this->label40->BackColor = System::Drawing::Color::Yellow;
+				break;
+			case 1:
+				this->label40->BackColor = System::Drawing::Color::Red;
+				break;
+			case 2:
+				this->label40->BackColor = System::Drawing::Color::Green;
+				break;
+			default:
+				break;
+			}
+
+			switch (TestResult[7])
+			{
+			case 0:
+				this->label41->BackColor = System::Drawing::Color::Yellow;
+				break;
+			case 1:
+				this->label41->BackColor = System::Drawing::Color::Red;
+				break;
+			case 2:
+				this->label41->BackColor = System::Drawing::Color::Green;
+				break;
+			default:
+				break;
+			}
+
+			switch (TestResult[8])
+			{
+			case 0:
+				this->label42->BackColor = System::Drawing::Color::Yellow;
+				break;
+			case 1:
+				this->label42->BackColor = System::Drawing::Color::Red;
+				break;
+			case 2:
+				this->label42->BackColor = System::Drawing::Color::Green;
+				break;
+			default:
+				break;
+			}
+
 		 
 		}
 
@@ -989,7 +1271,7 @@ private:
 		void ResetTestResult()
 		{
 			int i = 0;
-			while (i < 5)
+			while (i < 9)
 			{
 				TestResult[i] = 0;
 				i = i + 1;
@@ -1025,7 +1307,152 @@ private:
 		}
 	}
 
+		 private: Void writeCSVrecord() {
 
+			 
+
+			 eventLog->Write(DateTime::Now);
+			 eventLog->Write(",");
+			 //RSSI
+			 eventLog->Write(this->label21->Text);
+			 eventLog->Write(",");
+			 //DID
+			 eventLog->Write(this->label23->Text);
+			 eventLog->Write(",");
+			 //HBL
+			 eventLog->Write(this->label24->Text);
+			 eventLog->Write(",");
+			 //RID
+			 eventLog->Write(this->label29->Text);
+			 eventLog->Write(",");
+			 //RBL
+			 eventLog->Write(this->label27->Text);
+			 eventLog->Write(",");
+			 //SN
+			 eventLog->Write(this->label22->Text);
+			 eventLog->Write(",");
+			 //FirmwareVersion
+			 eventLog->Write(this->label34->Text);
+			 eventLog->Write(",");
+			 //LED1
+			 eventLog->Write(Convert::ToString(TestResult[1]));
+			 eventLog->Write(",");
+			 //LED2
+			 eventLog->Write(Convert::ToString(TestResult[2]));
+			 eventLog->Write(",");
+			 //Buzzer
+			 eventLog->Write(Convert::ToString(TestResult[3]));
+			 eventLog->Write(",");
+			 //QC name
+			 eventLog->Write(this->textBox1->Text);
+			 eventLog->Write(",");
+			 //RemotePair
+			 eventLog->WriteLine(Convert::ToString(TestResult[4]));
+
+			 int j = 1;
+			 int sum = 0;
+			 while (j < 9) {
+				 sum = TestResult[j] + sum;
+				 j = j + 1;
+			 }
+
+			 if (sum == 16 && this->label22->Text->Length == 20)
+			 {
+
+				 productLog->Write(DateTime::Now);
+				 productLog->Write(",");
+				 //RSSI
+				 productLog->Write(this->label21->Text);
+				 productLog->Write(",");
+				 //DID
+				 productLog->Write(this->label23->Text);
+				 productLog->Write(",");
+				 //HBL
+				 productLog->Write(this->label24->Text);
+				 productLog->Write(",");
+				 //RID
+				 productLog->Write(this->label29->Text);
+				 productLog->Write(",");
+				 //RBL
+				 productLog->Write(this->label27->Text);
+				 productLog->Write(",");
+				 //SN
+				 productLog->Write(this->label22->Text);
+				 productLog->Write(",");
+				 //FirmwareVersion
+				 productLog->Write(this->label34->Text);
+				 productLog->Write(",");
+				 //LED1
+				 productLog->Write(Convert::ToString(TestResult[1]));
+				 productLog->Write(",");
+				 //LED2
+				 productLog->Write(Convert::ToString(TestResult[2]));
+				 productLog->Write(",");
+				 //Buzzer
+				 productLog->Write(Convert::ToString(TestResult[3]));
+				 productLog->Write(",");
+				 //QC name
+				 eventLog->Write(this->textBox1->Text);
+				 eventLog->Write(",");
+				 //Color
+				
+					 eventLog->Write(this->comboBox3->Text);
+				
+				 eventLog->Write(",");
+				 //RemotePair
+				 productLog->WriteLine(Convert::ToString(TestResult[4]));
+
+				 String^ fileNameLable = "E:\\printtag\\eventlog.txt";
+				 labelLog = gcnew StreamWriter(fileNameLable);
+				 labelLog->Write(DateTime::Now);
+				 labelLog->Write(",");
+				 //RSSI
+				 labelLog->Write(this->label21->Text);
+				 labelLog->Write(",");
+				 //DID
+				 labelLog->Write(this->label23->Text);
+				 labelLog->Write(",");
+				 //HBL
+				 labelLog->Write(this->label24->Text);
+				 labelLog->Write(",");
+				 //RID
+				 labelLog->Write(this->label29->Text);
+				 labelLog->Write(",");
+				 //RBL
+				 labelLog->Write(this->label27->Text);
+				 labelLog->Write(",");
+				 //SN
+				 labelLog->Write(this->label22->Text);
+				 labelLog->Write(",");
+				 //FirmwareVersion
+				 labelLog->Write(this->label34->Text);
+				 labelLog->Write(",");
+				 //LED1
+				 labelLog->Write(Convert::ToString(TestResult[1]));
+				 labelLog->Write(",");
+				 //LED2
+				 labelLog->Write(Convert::ToString(TestResult[2]));
+				 labelLog->Write(",");
+				 //Buzzer
+				 labelLog->Write(Convert::ToString(TestResult[3]));
+				 labelLog->Write(",");
+				 //QC name
+				 labelLog->Write(this->textBox1->Text);
+				 labelLog->Write(",");
+				 //Color
+				 labelLog->Write(this->comboBox3->Text);
+				 labelLog->Write(",");
+				 //RemotePair
+				 labelLog->WriteLine(Convert::ToString(TestResult[4]));
+				 labelLog->Close();
+				 MessageBox::Show("产品合格！请取标签。",
+					 "Lumos质检程序", MessageBoxButtons::OKCancel,
+					 MessageBoxIcon::Asterisk);
+
+			 }
+			 
+		 
+		 }
 
 
 			 
@@ -1111,6 +1538,10 @@ private:
 							if (indata->Substring(j + 3, 1) == "I")
 							{
 								this->label21->Text = indata->Substring(j + 4, 4);
+								if(Convert::ToInt32(indata->Substring(j + 4, 4)) < 50)
+								{
+									TestResult[5] = 2;
+								}
 								this->richTextBox1->ScrollToCaret();
 							}
 						}
@@ -1123,7 +1554,7 @@ private:
 					{
 						indata->ToUpper();
 						this->label23->Text = indata->Substring(j + 2, 16)->ToUpper();
-						this->label22->Text = "KS" + indata->Substring(j + 2, 16)->ToUpper();
+						this->label22->Text = "KT" + this->comboBox3->Text + indata->Substring(j + 2, 16)->ToUpper();
 						this->richTextBox1->ScrollToCaret();
 					}
 				}
@@ -1137,7 +1568,7 @@ private:
 					}
 				}
 
-				if (indata->Substring(j, 1) == "B" && j + 6 < indata->Length)
+				if (indata->Substring(j, 1) == "B" && j + 7 < indata->Length)
 				{
 					if (indata->Substring(j + 1, 1) == "L")
 					{
@@ -1145,7 +1576,15 @@ private:
 						{
 							if (indata->Substring(j + 3, 1) == "R")
 							{
-								this->label27->Text = indata->Substring(j + 5, 2) + "%";
+								this->label27->Text = indata->Substring(j + 5, 3) + "%";
+								
+								if (indata->Substring(j + 5, 2) != "NA")
+								{
+									if (Convert::ToInt16(indata->Substring(j + 5, 3)) > 50)
+									{
+										TestResult[7] = 2;
+									}
+								}
 								this->richTextBox1->ScrollToCaret();
 							}
 						}
@@ -1153,14 +1592,41 @@ private:
 					}
 				}
 
-				if (indata->Substring(j, 1) == "B" && j + 4 < indata->Length)
+				if (indata->Substring(j, 1) == "B" && j + 5 < indata->Length)
 				{
 					if (indata->Substring(j + 1, 1) == "L")
 					{
-						if (indata->Substring(j + 2, 1) != "-")
+						if (indata->Substring(j + 2, 1) != "-" && indata->Substring(j + 2, 1) != ":")
 						{
 							this->label24->Text = indata->Substring(j + 2, 3) + "%";
+							if (Convert::ToInt16(indata->Substring(j + 2, 3)) > 50)
+							{
+								TestResult[6] = 2;
+							}
 							this->richTextBox1->ScrollToCaret();
+						}
+
+					}
+				}
+
+				if (indata->Substring(j, 1) == "S" && j + 7 < indata->Length)
+				{
+					if (indata->Substring(j + 1, 1) == "W")
+					{
+						if (indata->Substring(j + 2, 1) == "V")
+						{
+							if (indata->Substring(j + 3, 1) == "E")
+							{
+								if (indata->Substring(j + 4, 1) == "R")
+								{
+									this->label34->Text = indata->Substring(j + 5, 3);
+									if (indata->Substring(j + 5, 3) == FirmwareVersion)
+									{
+										TestResult[8] = 2;
+									}
+									this->richTextBox1->ScrollToCaret();
+								}
+							}
 						}
 
 					}
@@ -1186,7 +1652,6 @@ private: System::Void button4_Click_1(System::Object^  sender, System::EventArgs
 		this->button5->Enabled = true;
 		this->button11->Enabled = false;
 		this->button8->Enabled = false;
-		ResetTestResult();
 		UpdateTestResult();
 		state = 1;
 	}
@@ -1231,11 +1696,15 @@ private: System::Void button6_Click(System::Object^  sender, System::EventArgs^ 
 	this->button5->Enabled = false;
 	state = 0;
 
+	writeCSVrecord();
+
 	if (TestResult[4] == 0)
 	{
-		TestResult[4] = 1;
-		UpdateTestResult();
+		TestResult[4] = 1;	
 	}
+
+	ResetTestResult();
+	UpdateTestResult();
 
 	this -> label21->Text = "**";
 	this -> label22->Text = "**";
@@ -1312,6 +1781,23 @@ void backgroundWorker1_ProgressChanged(Object^ /*sender*/, ProgressChangedEventA
 private: System::Void label9_Click(System::Object^  sender, System::EventArgs^  e) {
 }
 
+private: System::Void label4_Click(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void label31_Click(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void label32_Click(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void comboBox4_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
+}
+
+private: System::Void MyForm_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+	eventLog->Close();
+	productLog->Close();
+}
+private: System::Void label33_Click(System::Object^  sender, System::EventArgs^  e) {
+}
 };
 
 
